@@ -10,6 +10,20 @@ async function getData(endpoint) {
   }
 }
 
+function getInputText() {
+  // ดึง DOM element ของ input
+  const inputElement = document.getElementById("search-input");
+
+  // ดึงข้อความที่ผู้ใช้ป้อน
+  const searchText = inputElement.value;
+  displayProductsList('/product_name/' + searchText + '&Food');
+  // สามารถทำอะไรกับ searchText ต่อไปได้เช่นเรียก API หรือประมวลผลข้อมูล
+  console.log("ค่าที่ผู้ใช้ป้อนในช่องค้นหา: " + searchText);
+
+}
+// เรียกฟังก์ชัน getInputText เมื่อผู้ใช้คลิกปุ่มค้นหา
+document.getElementById("search-button").addEventListener("click", getInputText);
+
 async function displayProductsList(endpoint) {
   const data = await getData(endpoint);
   const productsList = document.getElementById("products_list");
