@@ -6,11 +6,12 @@ const cors = require('cors');
 const app = express();
 const port = 8000;
 const dbConfig = {
-    host: '%', // โฮสต์ของ MySQL database server
-    user: 'sincostan', // ชื่อผู้ใช้ของฐานข้อมูล MySQL
-    password: '888', // รหัสผ่านของผู้ใช้ MySQL
-    database: 'db_sicmature-sql' // ชื่อของฐานข้อมูล MySQL ที่ต้องการเชื่อมต่อ
+    host: '127.0.0.1', // โฮสต์ของ MySQL database server
+    user: 'root', // ชื่อผู้ใช้ของฐานข้อมูล MySQL
+    password: '', // รหัสผ่านของผู้ใช้ MySQL
+    database: 'test' // ชื่อของฐานข้อมูล MySQL ที่ต้องการเชื่อมต่อ
 };
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -55,6 +56,19 @@ app.get('/products/:category', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
         const [data] = await conn.query('SELECT * FROM product WHERE Category = ?', [category]);
+        conn.end();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ "message": error.message });
+    }
+});
+
+app.get('/product_name/:Product_name', async (req, res) => {
+    const Product_name = req.params.Product_name;
+
+    try {
+        const conn = await mysql.createConnection(dbConfig);
+        const [data] = await conn.query('SELECT * FROM product WHERE Product_name LIKE ?', [`%${Product_name}%`]);
         conn.end();
         res.json(data);
     } catch (error) {
